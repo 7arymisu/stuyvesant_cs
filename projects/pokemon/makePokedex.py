@@ -111,15 +111,15 @@ def types():
         body = table(type_dict[poke_type])
 
         type_page = page
-        type_page = type_page.replace("?TITLE?", poke_type)
-        type_page = type_page.replace("?LINK?", "/~thuang80/pokemon/CSS/PokeStyle.css")
-        type_page = type_page.replace("?BODY?", body)
-        type_page = type_page.replace("?NAVBAR?", navbar(type_list))
+        type_page = type_page.replace("_TITLE_", poke_type)
+        type_page = type_page.replace("_STYLE_", "/~thuang80/pokemon/CSS/PokeStyle.css")
+        type_page = type_page.replace("_BODY_", body)
+        type_page = type_page.replace("_NAVBAR_", navbar(type_list))
 
         filename = poke_type
 
         with open(f"HTML/{filename}.html", "w") as f:
-            f.write(page)
+            f.write(type_page)
 
 # builds a list of types for  dropdown menu
 def build_type_list():
@@ -145,6 +145,7 @@ def home():
             favorite_pokemon[entry] = pokedict[entry]
     
     body += table(favorite_pokemon)
+    return body
 
 # ranks the top 10 pokemon
 def ranking():
@@ -205,11 +206,27 @@ def navbar(type_list):
 # -----------------------
 # MAIN
 # -----------------------
+with open('pokemon.csv', "r") as f:
+    pokedata =f.read().strip().split("\n")
+    
+    stats = pokedata[0].split(",") # gets the stats from the first line of the csv file and stores them in a list
+    pokedict = {}
+
+    for entry in pokedata[1:]:
+        pokeinfo = entry.split(",")
+        key = pokeinfo[0]
+
+        pokedict[key] = {}
+
+        for i, data in enumerate(pokeinfo):
+            pokedict[key][stats[i]] = data
+
+types()
 
 # homepage
 home_page = page
 home_page = home_page.replace("_TITLE_", "Welcome to the Pokedex!")
-home_page = home_page.replace("_STYLE", "/~thuang80/pokemon/CSS/PokeStyle.css") 
+home_page = home_page.replace("_STYLE_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
 home_page = home_page.replace("_BODY_", home())
 home_page = home_page.replace("_NAVBAR_",navbar(build_type_list()))
 
@@ -225,7 +242,7 @@ print(home_page)
 # all pokemon page
 all_pokemon_page = page
 all_pokemon_page = all_pokemon_page.replace("_TITLE_", "All Pokemon")
-all_pokemon_page = all_pokemon_page.replace("_STYLE", "/~thuang80/pokemon/CSS/PokeStyle.css") 
+all_pokemon_page = all_pokemon_page.replace("_STYLE_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
 all_pokemon_page = all_pokemon_page.replace("_BODY_", all_pokemon())
 all_pokemon_page = all_pokemon_page.replace("_NAVBAR_",navbar(build_type_list()))
 
@@ -237,8 +254,8 @@ with open("HTML/allpokemon.html", "w") as f:
     f.write(all_pokemon_page)
 
 ranking_page = page
-ranking_page = ranking_page.replace("_TITLE_", "Hyson's Top Ten")
-ranking_page = ranking_page.replace("_STYLE", "/~thuang80/pokemon/CSS/PokeStyle.css") 
+ranking_page = ranking_page.replace("_TITLE_", "Top 10 Pokemon O.A.T.")
+ranking_page = ranking_page.replace("_STYLE_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
 ranking_page = ranking_page.replace("_BODY_", ranking())
 ranking_page = ranking_page.replace("_NAVBAR_",navbar(build_type_list()))
 
@@ -248,18 +265,3 @@ with open("HTML/top10.html", "w") as f:
     except PermissionError:
         pass
     f.write(ranking_page)
-
-with open('pokemon.csv', "r") as f:
-    pokedata =f.read().strip().split("\n")
-    
-    stats = pokedata[0].split(",") # gets the stats from the first line of the csv file and stores them in a list
-    pokedict = {}
-
-    for entry in pokedata[1:]:
-        pokeinfo = entry.split(",")
-        key = pokeinfo[0]
-
-        pokedict[key] = {}
-
-        for i, data in enumerate(pokeinfo):
-            pokedict[key][stats[i]] = data
