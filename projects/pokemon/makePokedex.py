@@ -6,10 +6,10 @@ import os # import for chmod
 '''import cgitb # import to catch HTTP errors (when running on the web)
 cgitb.enable() # enable your error output for HTTP'''
 
-# constant
+# indent - constant
 INDENT = "  "
 
-# global variable
+# page template - global variable
 page = '''
 <!DOCTYPE html>
 <html lang="en">
@@ -121,6 +121,7 @@ def types():
         with open(f"HTML/{filename}.html", "w") as f:
             f.write(page)
 
+# builds a list of types for  dropdown menu
 def build_type_list():
     types = []
 
