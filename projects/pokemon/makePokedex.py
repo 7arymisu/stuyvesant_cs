@@ -64,12 +64,12 @@ def table(data):
 
         # 2. Front image
         row.append(
-            f'\n{INDENT*6}<td><img src="/~hli80/pokemon/img/front/{entry}.png"></td>'
+            f'\n{INDENT*6}<td><img src="/~thuang80/pokemon/img/front/{entry}.png"></td>'
         )
 
         # 3. Back image
         row.append(
-            f'\n{INDENT*6}<td><img src="/~hli80/pokemon/img/back/{entry}.png"></td>'
+            f'\n{INDENT*6}<td><img src="/~thuang80/pokemon/img/back/{entry}.png"></td>'
         )
 
         # 4. Stats
@@ -169,7 +169,7 @@ def navbar(type_list):
     for p in pages:
         page_buttons.append(
             f'\n{INDENT*6}<button class="button">'
-            f'<a href="/~hli80/pokemon/HTML/{p}.html">{p}</a>'
+            f'<a href="/~thuang80/pokemon/HTML/{p}.html">{p}</a>'
             f'</button>'
         )
 
@@ -238,7 +238,7 @@ with open("HTML/allpokemon.html", "w") as f:
 
 ranking_page = page
 ranking_page = ranking_page.replace("_TITLE_", "Hyson's Top Ten")
-ranking_page = ranking_page.replace("_STYLE", "/~hli80/pokemon/CSS/PokeStyle.css") 
+ranking_page = ranking_page.replace("_STYLE", "/~thuang80/pokemon/CSS/PokeStyle.css") 
 ranking_page = ranking_page.replace("_BODY_", ranking())
 ranking_page = ranking_page.replace("_NAVBAR_",navbar(build_type_list()))
 
