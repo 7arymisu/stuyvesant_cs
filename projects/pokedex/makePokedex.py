@@ -202,15 +202,15 @@ def navbar(type_list):
     '''
 
 # -----------------------
-# MAIN CODE
+# MAIN
 # -----------------------
 
 # homepage
 home_page = page
-home_page = home_page.replace("?TITLE?", "Welcome to the Pokedex!")
-home_page = home_page.replace("?LINK?", "/~thuang80/pokemon/CSS/PokeStyle.css") 
-home_page = home_page.replace("?BODY?", home())
-home_page = home_page.replace("?NAVBAR?",navbar(build_type_list()))
+home_page = home_page.replace("_TITLE_", "Welcome to the Pokedex!")
+home_page = home_page.replace("_STYLE", "/~thuang80/pokemon/CSS/PokeStyle.css") 
+home_page = home_page.replace("_BODY_", home())
+home_page = home_page.replace("_NAVBAR_",navbar(build_type_list()))
 
 with open("HTML/homepage.html", "w") as f:
     try:
@@ -223,10 +223,10 @@ print(home_page)
 
 # all pokemon page
 all_pokemon_page = page
-all_pokemon_page = all_pokemon_page.replace("?TITLE?", "All Pokemon")
-all_pokemon_page = all_pokemon_page.replace("?LINK?", "/~thuang80/pokemon/CSS/PokeStyle.css") 
-all_pokemon_page = all_pokemon_page.replace("?BODY?", all_pokemon())
-all_pokemon_page = all_pokemon_page.replace("?NAVBAR?",navbar(build_type_list()))
+all_pokemon_page = all_pokemon_page.replace("_TITLE_", "All Pokemon")
+all_pokemon_page = all_pokemon_page.replace("_STYLE", "/~thuang80/pokemon/CSS/PokeStyle.css") 
+all_pokemon_page = all_pokemon_page.replace("_BODY_", all_pokemon())
+all_pokemon_page = all_pokemon_page.replace("_NAVBAR_",navbar(build_type_list()))
 
 with open("HTML/allpokemon.html", "w") as f:
     try:
@@ -236,10 +236,10 @@ with open("HTML/allpokemon.html", "w") as f:
     f.write(all_pokemon_page)
 
 ranking_page = page
-ranking_page = ranking_page.replace("?TITLE?", "Hyson's Top Ten")
-ranking_page = ranking_page.replace("?LINK?", "/~hli80/pokemon/CSS/PokeStyle.css") 
-ranking_page = ranking_page.replace("?BODY?", ranking())
-ranking_page = ranking_page.replace("?NAVBAR?",navbar(build_type_list()))
+ranking_page = ranking_page.replace("_TITLE_", "Hyson's Top Ten")
+ranking_page = ranking_page.replace("_STYLE", "/~hli80/pokemon/CSS/PokeStyle.css") 
+ranking_page = ranking_page.replace("_BODY_", ranking())
+ranking_page = ranking_page.replace("_NAVBAR_",navbar(build_type_list()))
 
 with open("HTML/top10.html", "w") as f:
     try:
