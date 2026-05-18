@@ -64,12 +64,12 @@ def table(data):
 
         # 2. Front image
         row.append(
-            f'\n{INDENT*6}<td><img src="/~thuang80/pokemon/img/front/{entry}.png"></td>'
+            f'\n{INDENT*6}<td><img src="/~thuang80/public_html/pokemon/img/front/{entry}.png"></td>'
         )
 
         # 3. Back image
         row.append(
-            f'\n{INDENT*6}<td><img src="/~thuang80/pokemon/img/back/{entry}.png"></td>'
+            f'\n{INDENT*6}<td><img src="/~thuang80/public_html/pokemon/img/back/{entry}.png"></td>'
         )
 
         # 4. Stats
@@ -112,7 +112,7 @@ def types():
 
         type_page = page
         type_page = type_page.replace("_TITLE_", poke_type)
-        type_page = type_page.replace("_STYLE_", "/~thuang80/pokemon/CSS/PokeStyle.css")
+        type_page = type_page.replace("_STYLE_", "/~thuang80/public_html/pokemon/CSS/PokeStyle.css")
         type_page = type_page.replace("_BODY_", body)
         type_page = type_page.replace("_NAVBAR_", navbar(type_list))
 
@@ -170,7 +170,7 @@ def navbar(type_list):
     for p in pages:
         page_buttons.append(
             f'\n{INDENT*6}<button class="button">'
-            f'<a href="/~thuang80/pokemon/HTML/{p}.html">{p}</a>'
+            f'<a href="/~thuang80/public_html/pokemon/HTML/{p}.html">{p}</a>'
             f'</button>'
         )
 
@@ -206,7 +206,7 @@ def navbar(type_list):
 # -----------------------
 # MAIN
 # -----------------------
-with open('pokemon.csv', "r") as f:
+with open('/~thuang80/public_html/pokemon/pokemon.csv', "r") as f:
     pokedata =f.read().strip().split("\n")
     
     stats = pokedata[0].split(",") # gets the stats from the first line of the csv file and stores them in a list
