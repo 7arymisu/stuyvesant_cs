@@ -3,8 +3,8 @@ print("Content-Type: text/html\n\n")
 
 # used when debugging on the web
 import os # import for chmod
-'''import cgitb # import to catch HTTP errors (when running on the web)
-cgitb.enable() # enable your error output for HTTP'''
+import cgitb # import to catch HTTP errors (when running on the web)
+cgitb.enable() # enable your error output for HTTP
 
 # indent - constant
 INDENT = "  "
@@ -64,12 +64,12 @@ def table(data):
 
         # 2. Front image
         row.append(
-            f'\n{INDENT*6}<td><img src="/~thuang80/public_html/pokemon/img/front/{entry}.png"></td>'
+            f'\n{INDENT*6}<td><img src="~/thuang80/public_html/pokemon/img/front/{entry}.png"></td>'
         )
 
         # 3. Back image
         row.append(
-            f'\n{INDENT*6}<td><img src="/~thuang80/public_html/pokemon/img/back/{entry}.png"></td>'
+            f'\n{INDENT*6}<td><img src="~/thuang80/public_html/pokemon/img/back/{entry}.png"></td>'
         )
 
         # 4. Stats
@@ -112,13 +112,17 @@ def types():
 
         type_page = page
         type_page = type_page.replace("_TITLE_", poke_type)
-        type_page = type_page.replace("_STYLE_", "/~thuang80/public_html/pokemon/CSS/PokeStyle.css")
+        type_page = type_page.replace("_STYLE_", "~/thuang80/public_html/pokemon/CSS/PokeStyle.css")
         type_page = type_page.replace("_BODY_", body)
         type_page = type_page.replace("_NAVBAR_", navbar(type_list))
 
         filename = poke_type
 
         with open(f"HTML/{filename}.html", "w") as f:
+            try:
+                os.chmod(f"HTML/{filename}.html", 0o777)
+            except PermissionError:
+                pass
             f.write(type_page)
 
 # builds a list of types for  dropdown menu
@@ -135,7 +139,7 @@ def build_type_list():
 # generates the homepage
 def home():
     body = ''
-    body += f'\n{INDENT*2}<h1>Welcome to the Pokedex!</h1>'
+    body += f'{INDENT*2}<h1>Welcome to the Pokedex!</h1>'
     body += f'\n{INDENT*2}<p>Come on... Its Pikachu... Who doesnt love Pikachu?</p>'
     
     favorite_pokemon = {}
@@ -150,7 +154,7 @@ def home():
 # ranks the top 10 pokemon
 def ranking():
     body = ''
-    body += f'\n{INDENT*2}<h1>Top 10</h1>'
+    body += f'{INDENT*2}<h1>Top 10</h1>'
     body += f'\n{INDENT*2}<p>These are objectively the best Pokemon based on their overall stats. \n No bias *wink* *wink*</p>'
     
     best_pokemon = ["Arcanine", "Gyarados", "Lapras", "Snorlax", "Articuno", "Zapdos", "Moltres", "Dragonite", "Mewtwo", "Mew"]
@@ -159,8 +163,9 @@ def ranking():
     for entry in pokedict:
         if pokedict[entry]["Name"] in best_pokemon:
             ranking[entry] = pokedict[entry]
-
-    return body + table(ranking)
+    
+    body += table(ranking)
+    return body
 
 def navbar(type_list):
 
@@ -170,7 +175,7 @@ def navbar(type_list):
     for p in pages:
         page_buttons.append(
             f'\n{INDENT*6}<button class="button">'
-            f'<a href="/~thuang80/public_html/pokemon/HTML/{p}.html">{p}</a>'
+            f'<a href="~/thuang80/public_html/pokemon/HTML/{p}.html">{p}</a>'
             f'</button>'
         )
 
@@ -206,7 +211,7 @@ def navbar(type_list):
 # -----------------------
 # MAIN
 # -----------------------
-with open('/~thuang80/public_html/pokemon/pokemon.csv', "r") as f:
+with open('/home/students/even/2028/thuang80/public_html/pokemon/pokemon.csv', "r") as f:
     pokedata =f.read().strip().split("\n")
     
     stats = pokedata[0].split(",") # gets the stats from the first line of the csv file and stores them in a list
@@ -226,7 +231,7 @@ types()
 # homepage
 home_page = page
 home_page = home_page.replace("_TITLE_", "Welcome to the Pokedex!")
-home_page = home_page.replace("_STYLE_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
+home_page = home_page.replace("_STYLE_", "~/thuang80/public_html/pokemon/CSS/PokeStyle.css") 
 home_page = home_page.replace("_BODY_", home())
 home_page = home_page.replace("_NAVBAR_",navbar(build_type_list()))
 
@@ -242,7 +247,7 @@ print(home_page)
 # all pokemon page
 all_pokemon_page = page
 all_pokemon_page = all_pokemon_page.replace("_TITLE_", "All Pokemon")
-all_pokemon_page = all_pokemon_page.replace("_STYLE_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
+all_pokemon_page = all_pokemon_page.replace("_STYLE_", "~/thuang80/public_html/pokemon/CSS/PokeStyle.css") 
 all_pokemon_page = all_pokemon_page.replace("_BODY_", all_pokemon())
 all_pokemon_page = all_pokemon_page.replace("_NAVBAR_",navbar(build_type_list()))
 
@@ -255,7 +260,7 @@ with open("HTML/allpokemon.html", "w") as f:
 
 ranking_page = page
 ranking_page = ranking_page.replace("_TITLE_", "Top 10 Pokemon O.A.T.")
-ranking_page = ranking_page.replace("_STYLE_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
+ranking_page = ranking_page.replace("_STYLE_", "~/thuang80/public_html/pokemon/CSS/PokeStyle.css") 
 ranking_page = ranking_page.replace("_BODY_", ranking())
 ranking_page = ranking_page.replace("_NAVBAR_",navbar(build_type_list()))
 
