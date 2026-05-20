@@ -30,7 +30,6 @@ page = '''
 '''
 
 # DEFINITIONS ----
-
 ## generates the table given a dictionary of pokemon data
 def table(data):
     table_template = '''
@@ -107,7 +106,7 @@ def navbar(type_list): ## takes in a list of types to generate the dropdown menu
     navbar_template = navbar_template.replace("_types_", types)
     page = page.replace("_NAVBAR_", navbar_template)
 
-#generates the homepage
+## generates the homepage
 def home():
     body = '''
     <p>Come on... Its Pikachu... Who doesnt love Pikachu?</p>
