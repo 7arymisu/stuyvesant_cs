@@ -156,9 +156,9 @@ def typing():
 
     for entry in pokedict:
         type_list = []
-        entry = pokedict[entry]
-        type1 = entry["Type 1"]
-        type2 = entry["Type 2"]
+        pokemon = pokedict[entry]
+        type1 = pokemon["Type 1"]
+        type2 = pokemon["Type 2"]
         type_list.append(type1)
 
         if type2 != "":
@@ -168,14 +168,13 @@ def typing():
         for type in type_list:
             if type not in types:
                 types[type] = {}
-
             types[type][key] = {}
-            types[type][key]["#"] = entry["#"]
-            types[type][key][f'{type} Type Pokemon Names'] = entry["Name"]
-            types[type][key]["Front"] = entry["Front"]
-            types[type][key]["Back"] = entry["Back"]
-            types[type][key]["Type 1"] = entry["Type 1"]
-            types[type][key]["Type 2"] = entry["Type 2"]
+            types[type][key]["#"] = pokemon["#"]
+            types[type][key][f'{type} Type Pokemon Names'] = pokemon["Name"]
+            types[type][key]["Front"] = pokemon["Front"]
+            types[type][key]["Back"] = pokemon["Back"]
+            types[type][key]["Type 1"] = pokemon["Type 1"]
+            types[type][key]["Type 2"] = pokemon["Type 2"]
             
     typings = []
     for type in types:
