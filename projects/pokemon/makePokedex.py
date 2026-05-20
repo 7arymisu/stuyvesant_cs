@@ -9,6 +9,7 @@ cgitb.enable() # enable your error output for HTTP
 # CONSTANTS ----
 INDENT = "  "
 
+## HTML template for all pages
 page = '''
 <!DOCTYPE html>
 <html lang="en">
@@ -29,6 +30,8 @@ page = '''
 '''
 
 # DEFINITIONS ----
+
+## generates the table given a dictionary of pokemon data
 def table(data):
     table_template = '''
     <table>
@@ -63,7 +66,8 @@ def table(data):
     table_template = table_template.replace("_BODY_", cell)
     return table_template
 
-def navbar(type_list):
+## generates the navbar for all pages
+def navbar(type_list): ## takes in a list of types to generate the dropdown menu for types
     navbar_template = '''
     <header>
             <nav class="navbar">
@@ -103,6 +107,7 @@ def navbar(type_list):
     navbar_template = navbar_template.replace("_types_", types)
     page = page.replace("_NAVBAR_", navbar_template)
 
+#generates the homepage
 def home():
     body = '''
     <p>Come on... Its Pikachu... Who doesnt love Pikachu?</p>
@@ -128,6 +133,7 @@ def home():
 
     return print(home_page)
 
+## generates the page with all pokemon present
 def all_pokemon():
     body = ""
     body += table(pokedict)
@@ -144,6 +150,7 @@ def all_pokemon():
             pass
         f.write(all_pokemon_page)
 
+## generates the pages for each type of pokemon
 def typing():
     body = ""
     types = {} 
@@ -194,6 +201,7 @@ def typing():
             f.write(type_page)
     return 
 
+## generates the page with the top 10 pokemon based on overall stats
 def ranking():
     body = ""
     body += f'{INDENT*2}<h1>Top 10</h1>'
@@ -219,7 +227,7 @@ def ranking():
         f.write(ranking_page)
 
 # MAIN ----
-with open("projects/pokemon/pokemon.csv", "r") as f:
+with open("/home/students/even/2028/thuang80/public_html/pokemon/pokemon.csv", "r") as f:
     pokedata = f.read().strip().split("\n")
     stats = pokedata[0].split(",") # gets the stats from the first line of the csv file and stores them in a list
     pokedict = {}
