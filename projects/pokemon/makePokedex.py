@@ -2,11 +2,13 @@
 print("Content-Type: text/html\n\n")
 
 # used when debugging on the web
-'''import os # import for chmod
+import os # import for chmod
 import cgitb # import to catch HTTP errors (when running on the web)
-cgitb.enable() # enable your error output for HTTP'''
+cgitb.enable() # enable your error output for HTTP
 
 # CONSTANTS ----
+INDENT = "  "
+
 page = '''
 <!DOCTYPE html>
 <html lang="en">
@@ -36,6 +38,185 @@ def table(data):
         _BODY_
     </table>'''
 
+    header = ''
+    for i in stats:
+        header += f'\n{INDENT*4}<th>{i}</th>'
+    table_template = table_template.replace("_HEADER_", header)
+
+    cell = ""
+    cell_data = ""
+    cell_template = '''
+    <tr>
+        _CELL_
+    </tr>'''
+
+    for entry in data:
+        for stat in stats:
+            value = data[entry][stat]
+            if stat == stats[-1]:
+                cell_data += f'\n{INDENT*4}<td>{value}</td>'
+                cell += cell_template.replace("_CELL_", cell_data)
+                cell_data = ""
+            else:
+                cell_data += f'\n{INDENT*4}<td>{value}</td>'
+    
+    table_template = table_template.replace("_BODY_", cell)
+    return table_template
+
+def navbar(type_list):
+    navbar_template = '''
+    <header>
+            <nav class="navbar">
+                <ul>
+                    <span class="dropdown">
+                        _webbuttons_
+                    </span>
+                    <span class="dropdown">
+                        <button class="button">Types</button>
+                        <span class="dropdown-content">
+                            _types_
+                        </span>
+                    </span>
+                </ul>
+            </nav>
+        </header>
+    '''
+
+    page_list = ["homepage", "allpokemon", "top10"]
+    page = []
+    for page in page_list:
+        if page == page_list[0]:
+            page.append(f'<button class="button"><a href="/~thuang80/pokemon/HTML/{page}.html">{page}</a></button>')
+        else:
+            page.append(f'{INDENT*6}<button class="button"><a href="/~thuang80/pokemon/HTML/{page}.html">{page}</a></button>')
+    page = "\n".join(page)
+
+    types = []
+    for type in type_list:
+        if type == type_list[0]:
+            types.append(f'<a href="/~thuang80/pokemon/HTML/{type}.html">{type}</a>') 
+        else:
+            types.append(f'{INDENT*7}<a href="/~thuang80/pokemon/HTML/{type}.html">{type}</a>') 
+    types = "\n".join(types)
+
+    navbar_template = navbar_template.replace("_webbuttons_", page)
+    navbar_template = navbar_template.replace("_types_", types)
+    page = page.replace("_NAVBAR_", navbar_template)
+
+def home():
+    body = '''
+    <p>Come on... Its Pikachu... Who doesnt love Pikachu?</p>
+    '''
+
+    favorite_pokemon = {}
+    for entry in pokedict:
+        if pokedict[entry]["Name"] == "Pikachu":
+            favorite_pokemon[entry] = pokedict[entry]
+    body += table(favorite_pokemon)
+    
+    home_page = page
+    home_page = home_page.replace("_TITLE_", "Taryn's Pokedex")
+    home_page = home_page.replace("_Style_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
+    home_page = home_page.replace("_BODY_", body)
+
+    with open("HTML/homepage.html", "w") as f:
+        try:
+            os.chmod("HTML/homepage.html", 0o777)
+        except PermissionError:
+            pass
+        f.write(home_page)
+
+    return print(home_page)
+
+def all_pokemon():
+    body = ""
+    body += table(pokedict)
+
+    all_pokemon_page = page
+    all_pokemon_page = all_pokemon_page.replace("_TITLE_", "Taryn's Pokedex")
+    all_pokemon_page = all_pokemon_page.replace("_Style_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
+    all_pokemon_page = all_pokemon_page.replace("_BODY_", body)
+
+    with open("HTML/allpokemon.html", "w") as f:
+        try:
+            os.chmod("HTML/allpokemon.html", 0o777)
+        except PermissionError:
+            pass
+        f.write(all_pokemon_page)
+
+def typing():
+    body = ""
+    types = {} 
+
+    for entry in pokedict:
+        type_list = []
+        entry = pokedict[entry]
+        type1 = entry["Type 1"]
+        type2 = entry["Type 2"]
+        type_list.append(type1)
+
+        if type2 != "":
+            type_list.append(type2) 
+            type_list.append(f"{type1} & {type2}")
+
+        for type in type_list:
+            if type not in types:
+                types[type] = {}
+
+            types[type][key] = {}
+            types[type][key]["#"] = entry["#"]
+            types[type][key][f'{type} Type Pokemon Names'] = entry["Name"]
+            types[type][key]["Front"] = entry["Front"]
+            types[type][key]["Back"] = entry["Back"]
+            types[type][key]["Type 1"] = entry["Type 1"]
+            types[type][key]["Type 2"] = entry["Type 2"]
+            
+    typings = []
+    for type in types:
+        typings.append(type)
+
+    navbar(typings)
+
+    for type in types: #create type websites
+        body = ""
+        body += table(types[type])
+
+        type_page = page
+        type_page = type_page.replace("_TITLE_", str(type))
+        type_page = type_page.replace("_Style_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
+        type_page = type_page.replace("_BODY_", body)
+
+        with open(f"HTML/{type}.html", "w") as f:
+            try:
+                os.chmod(f"HTML/{type}.html", 0o777)
+            except PermissionError:
+                pass
+            f.write(type_page)
+    return 
+
+def ranking():
+    body = ""
+    body += f'{INDENT*2}<h1>Top 10</h1>'
+    body += f'\n{INDENT*2}<p>These are objectively the best Pokemon based on their overall stats. \n No bias *wink* *wink*</p>'
+
+    ranking_dict = {}
+    best_pokemon = ["Arcanine", "Gyarados", "Lapras", "Snorlax", "Articuno", "Zapdos", "Moltres", "Dragonite", "Mewtwo", "Mew"]
+    for entry in pokedict:
+        if pokedict[entry]["Name"] in best_pokemon:
+            ranking_dict[entry] = pokedict[entry]
+    body += table(ranking_dict)
+
+    ranking_page = page
+    ranking_page = ranking_page.replace("_TITLE_", "Top 10 Pokemon O.A.T.")
+    ranking_page = ranking_page.replace("_Style_", "/~thuang80/pokemon/CSS/PokeStyle.css")
+    ranking_page = ranking_page.replace("_BODY_", body)
+    
+    with open("HTML/top10.html", "w") as f:
+        try:
+            os.chmod("HTML/top10.html", 0o777)
+        except PermissionError:
+            pass
+        f.write(ranking_page)
 
 # MAIN ----
 with open("projects/pokemon/pokemon.csv", "r") as f:
@@ -55,4 +236,7 @@ with open("projects/pokemon/pokemon.csv", "r") as f:
                 pokedict[key]["Front"] = f'''<img src="/~thuang80/pokemon/img/front/{key}.png">''' #add Front stat and img
                 pokedict[key]["Back"] = f'''<img src="/~thuang80/pokemon/img/back/{key}.png">''' #add Back stat and img
 
-print(stats)
+typing()
+all_pokemon()
+home()
+ranking()
