@@ -2,12 +2,12 @@
 print("Content-Type: text/html\n\n")
 
 # used when debugging on the web
-import os # import for chmod
-import cgitb # import to catch HTTP errors (when running on the web)
-cgitb.enable() # enable your error output for HTTP
+import os # import to change permissions of files (when running on the web)
+#import cgitb # import to catch HTTP errors (when running on the web)
+#cgitb.enable() # enable your error output for HTTP
 
 # CONSTANTS ----
-INDENT = "  "
+INDENT = "    "
 
 ## HTML template for all pages
 page = '''
@@ -27,46 +27,49 @@ page = '''
         _BODY_
     </body>
 </html>
-'''
+'''.strip()
 
 # DEFINITIONS ----
 ## generates the table given a dictionary of pokemon data
 def table(data):
     table_template = '''
-    <table>
-        <thead>
-            _HEADER_
-        </thead>
-        _BODY_
-    </table>'''
+            <table>
+                <thead>
+                    _HEADER_
+                </thead>
+                _BODY_
+            </table>'''.lstrip()
 
     header = ''
     for i in stats:
-        header += f'\n{INDENT*4}<th>{i}</th>'
+        header += f'\n{INDENT*3}<th>{i}</th>'
+    header = header.strip()
     table_template = table_template.replace("_HEADER_", header)
 
     cell = ""
     cell_data = ""
-    cell_template = '''
-    <tr>
-        _CELL_
-    </tr>'''
+    cell_template = f'''
+        <tr>
+            _CELL_
+        </tr>'''.strip()
 
     for entry in data:
         for stat in stats:
             value = data[entry][stat]
             if stat == stats[-1]:
-                cell_data += f'\n{INDENT*4}<td>{value}</td>'
+                cell_data += f'\n{INDENT*3}<td>{value}</td>'
+                cell_data = cell_data.strip()
                 cell += cell_template.replace("_CELL_", cell_data)
                 cell_data = ""
             else:
-                cell_data += f'\n{INDENT*4}<td>{value}</td>'
-    
+                cell_data += f'\n{INDENT*3}<td>{value}</td>'
+
     table_template = table_template.replace("_BODY_", cell)
     return table_template
 
 ## generates the navbar for all pages
 def navbar(type_list): ## takes in a list of types to generate the dropdown menu for types
+    global page
     navbar_template = '''
     <header>
             <nav class="navbar">
@@ -83,16 +86,16 @@ def navbar(type_list): ## takes in a list of types to generate the dropdown menu
                 </ul>
             </nav>
         </header>
-    '''
+    '''.strip()
 
     page_list = ["homepage", "allpokemon", "top10"]
-    page = []
-    for page in page_list:
-        if page == page_list[0]:
-            page.append(f'<button class="button"><a href="/~thuang80/pokemon/HTML/{page}.html">{page}</a></button>')
+    page_links = []
+    for name in page_list:
+        if name == page_list[0]:
+            page_links.append(f'<button class="button"><a href="/~thuang80/pokemon/HTML/{name}.html">{name}</a></button>')
         else:
-            page.append(f'{INDENT*6}<button class="button"><a href="/~thuang80/pokemon/HTML/{page}.html">{page}</a></button>')
-    page = "\n".join(page)
+            page_links.append(f'{INDENT*6}<button class="button"><a href="/~thuang80/pokemon/HTML/{name}.html">{name}</a></button>')
+    page_links = "\n".join(page_links)
 
     types = []
     for type in type_list:
@@ -102,15 +105,16 @@ def navbar(type_list): ## takes in a list of types to generate the dropdown menu
             types.append(f'{INDENT*7}<a href="/~thuang80/pokemon/HTML/{type}.html">{type}</a>') 
     types = "\n".join(types)
 
-    navbar_template = navbar_template.replace("_webbuttons_", page)
+    navbar_template = navbar_template.replace("_webbuttons_", page_links)
     navbar_template = navbar_template.replace("_types_", types)
     page = page.replace("_NAVBAR_", navbar_template)
 
 ## generates the homepage
 def home():
-    body = '''
-    <p>Come on... Its Pikachu... Who doesnt love Pikachu?</p>
-    '''
+    body = f'''
+        <h1>...Favorite Pokemon...</h1>
+        <p>Come on... Its Pikachu... Who doesnt love Pikachu?</p>
+    '''.strip()
 
     favorite_pokemon = {}
     for entry in pokedict:
@@ -120,7 +124,7 @@ def home():
     
     home_page = page
     home_page = home_page.replace("_TITLE_", "Taryn's Pokedex")
-    home_page = home_page.replace("_Style_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
+    home_page = home_page.replace("_STYLE_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
     home_page = home_page.replace("_BODY_", body)
 
     with open("HTML/homepage.html", "w") as f:
@@ -134,12 +138,14 @@ def home():
 
 ## generates the page with all pokemon present
 def all_pokemon():
-    body = ""
+    body = f'''
+        <h1>All Pokemon</h1>\n'
+        <p>These are all the Pokemon from Gen 1. Very cool :)</p>'''.strip()
     body += table(pokedict)
 
     all_pokemon_page = page
     all_pokemon_page = all_pokemon_page.replace("_TITLE_", "Taryn's Pokedex")
-    all_pokemon_page = all_pokemon_page.replace("_Style_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
+    all_pokemon_page = all_pokemon_page.replace("_STYLE_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
     all_pokemon_page = all_pokemon_page.replace("_BODY_", body)
 
     with open("HTML/allpokemon.html", "w") as f:
@@ -151,7 +157,6 @@ def all_pokemon():
 
 ## generates the pages for each type of pokemon
 def typing():
-    body = ""
     types = {} 
 
     for entry in pokedict:
@@ -163,18 +168,11 @@ def typing():
 
         if type2 != "":
             type_list.append(type2) 
-            type_list.append(f"{type1} & {type2}")
 
         for type in type_list:
             if type not in types:
                 types[type] = {}
-            types[type][key] = {}
-            types[type][key]["#"] = pokemon["#"]
-            types[type][key][f'{type} Type Pokemon Names'] = pokemon["Name"]
-            types[type][key]["Front"] = pokemon["Front"]
-            types[type][key]["Back"] = pokemon["Back"]
-            types[type][key]["Type 1"] = pokemon["Type 1"]
-            types[type][key]["Type 2"] = pokemon["Type 2"]
+            types[type][entry] = pokemon.copy()
             
     typings = []
     for type in types:
@@ -183,12 +181,12 @@ def typing():
     navbar(typings)
 
     for type in types: #create type websites
-        body = ""
+        body = f'    <h1>{type}</h1>\n    <p>These are all the {type} type Pokemon.\nVery cool!</p>'
         body += table(types[type])
 
         type_page = page
         type_page = type_page.replace("_TITLE_", str(type))
-        type_page = type_page.replace("_Style_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
+        type_page = type_page.replace("_STYLE_", "/~thuang80/pokemon/CSS/PokeStyle.css") 
         type_page = type_page.replace("_BODY_", body)
 
         with open(f"HTML/{type}.html", "w") as f:
@@ -197,13 +195,14 @@ def typing():
             except PermissionError:
                 pass
             f.write(type_page)
-    return 
 
 ## generates the page with the top 10 pokemon based on overall stats
 def ranking():
-    body = ""
-    body += f'{INDENT*2}<h1>Top 10</h1>'
-    body += f'\n{INDENT*2}<p>These are objectively the best Pokemon based on their overall stats. \n No bias *wink* *wink*</p>'
+    body = f'''
+        <h1>Top 10 O.A.T.</h1>
+        <p>These are objectively the best Pokemon based on their overall stats.</p>
+        <p>No bias *wink* *wink*</p>
+    '''.strip()
 
     ranking_dict = {}
     best_pokemon = ["Arcanine", "Gyarados", "Lapras", "Snorlax", "Articuno", "Zapdos", "Moltres", "Dragonite", "Mewtwo", "Mew"]
@@ -214,7 +213,7 @@ def ranking():
 
     ranking_page = page
     ranking_page = ranking_page.replace("_TITLE_", "Top 10 Pokemon O.A.T.")
-    ranking_page = ranking_page.replace("_Style_", "/~thuang80/pokemon/CSS/PokeStyle.css")
+    ranking_page = ranking_page.replace("_STYLE_", "/~thuang80/pokemon/CSS/PokeStyle.css")
     ranking_page = ranking_page.replace("_BODY_", body)
     
     with open("HTML/top10.html", "w") as f:
@@ -241,6 +240,8 @@ with open("/home/students/even/2028/thuang80/public_html/pokemon/pokemon.csv", "
             if i == 1:
                 pokedict[key]["Front"] = f'''<img src="/~thuang80/pokemon/img/front/{key}.png">''' #add Front stat and img
                 pokedict[key]["Back"] = f'''<img src="/~thuang80/pokemon/img/back/{key}.png">''' #add Back stat and img
+
+    stats = stats[:1] + ["Front", "Back"] + stats[1:]
 
 typing()
 all_pokemon()
