@@ -24,6 +24,7 @@ page = '''
     </head>
     <body>
         _NAVBAR_
+
         _BODY_
     </body>
 </html>
@@ -33,17 +34,17 @@ page = '''
 ## generates the table given a dictionary of pokemon data
 def table(data):
     table_template = '''
-            <table>
-                <thead>
-                    _HEADER_
+        <table>
+            <thead>
+                _HEADER_
                 </thead>
-                _BODY_
-            </table>'''.lstrip()
+            _BODY_
+        </table>'''.lstrip()
 
     header = ''
     for i in stats:
         header += f'\n{INDENT*3}<th>{i}</th>'
-    header = header.strip()
+    header = header
     table_template = table_template.replace("_HEADER_", header)
 
     cell = ""
@@ -71,7 +72,7 @@ def table(data):
 def navbar(type_list): ## takes in a list of types to generate the dropdown menu for types
     global page
     navbar_template = '''
-    <header>
+        <header>
             <nav class="navbar">
                 <ul>
                     <span class="dropdown">
@@ -86,7 +87,7 @@ def navbar(type_list): ## takes in a list of types to generate the dropdown menu
                 </ul>
             </nav>
         </header>
-    '''.strip()
+        '''.strip()
 
     page_list = ["homepage", "allpokemon", "top10"]
     page_links = []
@@ -114,7 +115,7 @@ def home():
     body = f'''
         <h1>...Favorite Pokemon...</h1>
         <p>Come on... Its Pikachu... Who doesnt love Pikachu?</p>
-    '''.strip()
+        '''.strip()
 
     favorite_pokemon = {}
     for entry in pokedict:
@@ -139,7 +140,7 @@ def home():
 ## generates the page with all pokemon present
 def all_pokemon():
     body = f'''
-        <h1>All Pokemon</h1>\n'
+        <h1>All Pokemon</h1>'
         <p>These are all the Pokemon from Gen 1. Very cool :)</p>'''.strip()
     body += table(pokedict)
 
