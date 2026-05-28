@@ -134,8 +134,7 @@ def home():
         except PermissionError:
             pass
         f.write(home_page)
-
-    return print(home_page)
+    return print(home_page) # this is what prints upon enter
 
 ## generates the page with all pokemon present
 def all_pokemon():
@@ -206,7 +205,7 @@ def ranking():
     '''.strip()
 
     ranking_dict = {}
-    best_pokemon = ["Arcanine", "Gyarados", "Lapras", "Snorlax", "Articuno", "Zapdos", "Moltres", "Dragonite", "Mewtwo", "Mew"]
+    best_pokemon = ["Pikachu", "Charizard", "Gengar", "Mewtwo", "Eevee", "Bulbasaur", "Dragonite", "Arcanine", "Mew", "Gyarados"]
     for entry in pokedict:
         if pokedict[entry]["Name"] in best_pokemon:
             ranking_dict[entry] = pokedict[entry]
