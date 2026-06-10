@@ -1,0 +1,78 @@
+body {
+    font-family: 'Comic Sans MS', 'Comic Sans';
+    background-color: #e0f2ff; 
+    color: #1a1a1a;            
+    margin: 0;
+    line-height: 1.7;
+}
+
+h1{
+    text-align: center;
+}
+
+/* Navbar */
+.navbar {
+    text-align: center;
+    padding: 20px;
+    background-color: #cce6ff;
+    border-bottom: 1px solid #99ccff;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #003366; 
+    font-weight: 500;
+}
+
+.navbar a:hover {
+    color: #0059b3; 
+}
+
+/* div container */
+.container {
+    width: 70%;
+    margin: auto;
+    padding: 40px;
+    background-color: #f0f9ff; 
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+/* Spans */
+.highlight { font-weight: bold; color: #004080; }
+.city { font-style: italic; color: #3399ff; }
+.emphasis { background-color: #cce6ff; padding: 2px 4px; border-radius: 3px; }
+.space { color: #66b3ff; font-weight: 500; }
+.stem { color: #3399cc; font-weight: bold; }
+
+/* Images */
+#pfp {
+    width: 200px;
+    float: right;
+    margin: 0 0 15px 20px;
+    border-radius: 8px;
+    border: 2px solid #99ccff; 
+}
+
+.movie {
+    height: 150px;
+    border-radius: 5px;
+    border: 2px solid #b3d9ff;
+}
+
+/* Lists */
+ul, ol {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
