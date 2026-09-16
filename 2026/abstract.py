@@ -1,0 +1,22 @@
+def setup():
+    size(400,400)
+    
+def draw():
+    background("#CEEEF8")
+    fill("#FEF1AB")
+    triangle(0,0, 100,100, 0,200)
+    no_stroke()
+    fill("#E9F9E5")
+    triangle(0,0, 100,0, 100,100)
+    no_stroke()
+    fill("#D0C3F1")
+    square(300,280,200)
+    no_stroke()
+    fill("#FFD7EE")
+    circle(300,80,200)
+    no_stroke()
+    fill("#809BCE")
+    square(150,150,200)
+    no_stroke()
+    fill("#B8E032")
+    rect(50,300,175,40)
